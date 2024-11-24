@@ -8,6 +8,8 @@
 #include <fcntl.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#include "utils.h"
+#include "space_invaders.h" 
 
 #define MAX_tela_X 50  
 #define MAX_tela_y 16
@@ -141,44 +143,6 @@ void carregar_pontuacao_maxima() {
 }
 
 
-int kbhit(void) {
-    struct termios oldt, newt;
-    int ch;
-    int oldf;
-    
-    tcgetattr(STDIN_FILENO, &oldt); 
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO); 
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt); 
-    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK); 
-
-    ch = getchar();
-
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); 
-    fcntl(STDIN_FILENO, F_SETFL, oldf);
-
-    if (ch != EOF) {
-        ungetc(ch, stdin); 
-        return 1;
-    }
-
-    return 0;
-}
-
-
-int getch(void) {
-    struct termios oldt, newt;
-    int move;
-    tcgetattr(STDIN_FILENO, &oldt);            
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);          
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);  
-    move = getchar();                            
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);   
-    return move;
-}
-
 void tocar_som(char *arquivo_som) {
     char comando[100];
     snprintf(comando, sizeof(comando), "afplay '%s' &", arquivo_som); 
@@ -208,9 +172,6 @@ Mix_Music* tocarMusicaFundo(const char* caminho_musica) {
     return musica;
 }
 
-void limpar() {
-    system("clear"); 
-}
 
 void tela() {
   
@@ -840,7 +801,7 @@ void tiro_e_colisao() {
 }
 
 
-int main() {
+void inicia_space() {
     srand(time(NULL));
     carregar_pontuacao_maxima();
     iniciarAudio(); 
@@ -858,5 +819,5 @@ int main() {
     Mix_FreeMusic(musica);
     Mix_CloseAudio();
     SDL_Quit();
-    return 0;
 }
+   

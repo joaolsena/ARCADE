@@ -6,6 +6,7 @@
 #include <string.h>
 #include "snake.h"
 #include "flappy_bird.h"
+#include "space_invaders.h" 
 #include "utils.h"  
 
 #define MAX_tela_X 35
@@ -132,7 +133,7 @@ void mover() {
                         iniciarflappy_bird();
                         break;
                     case 2:
-                        printf("Iniciando Space Invaders...\n");
+                        inicia_space();
                         break;
                     case 3:
                         estado_atual = TELA_MENU_PRINCIPAL;
