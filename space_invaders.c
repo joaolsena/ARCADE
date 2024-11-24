@@ -375,6 +375,7 @@ void tela_game_over() {
     SDL_Quit();
      tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvaders/sons/death-sound.mp3");
      salvar_pontuacao_maxima();
+    
     do
     {
     limpar();

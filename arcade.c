@@ -51,15 +51,15 @@ void desenharMenuPrincipal() {
             } else if (i == MAX_tela_y - 1) {
                 printf("_");
             } else if (i == 2 && j >= 12 && j <= 19) {
-                if (j == 12) printf(" ARCADE ");
+                if (j == 12) printf(" \033[33mARCADE\033[0m ");
             } else if (i == 10 && j >= 12 && j <= 22) {
-                if (j == 12) printf("Ver Ranking");
+                if (j == 12) printf("\033[34mVer Ranking\033[0m");
             } else if (i == 15 && j >= 10 && j <= 25) {
-                if (j == 10) printf("Selecionar Jogos");
+                if (j == 10) printf("\033[32mSelecionar Jogos\033[0m");
             } else if (i == 20 && j >= 15 && j <= 18) {
-                if (j == 15) printf("Sair");
+                if (j == 15) printf("\033[35mSair\033[0m");
             } else if (j == 9 && i == opcao_y[opcao_atual]) {
-                printf("%c", forma_escolha);
+                printf("\033[36m%c\033[0m", forma_escolha);
             } else {
                 printf(" ");
             }
@@ -82,17 +82,17 @@ void desenharSelecaoJogos() {
             } else if (i == MAX_tela_y - 1) {
                 printf("_");
             } else if (i == 2 && j >= 10 && j <= 26) {
-                if (j == 10) printf("SELECIONE UM JOGO");
+                if (j == 10) printf("\033[34mSELECIONE UM JOGO\033[0m");
             } else if (i == 5 && j >= 12 && j <= 16) {
-                if (j == 12) printf("Snake");
+                if (j == 12) printf("\033[32mSnake\033[0m");
             } else if (i == 10 && j >= 12 && j <= 22) {
-                if (j == 12) printf("Flappy Bird");
+                if (j == 12) printf("\033[31mFlappy Bird\033[0m");
             } else if (i == 15 && j >= 12 && j <= 25) {
-                if (j == 12) printf("Space Invaders");
+                if (j == 12) printf("\033[33mSpace Invaders\033[0m");
             } else if (i == 20 && j >= 12 && j <= 17) {
-                if (j == 12) printf("Voltar");
+                if (j == 12) printf("\033[35mVoltar\033[0m");
             } else if (j == 9 && i == opcao_selecao_jogos_y[opcao_atual]) {
-                printf("%c", forma_escolha);
+                printf("\033[36m%c\033[0m", forma_escolha);
             } else {
                 printf(" ");
             }
