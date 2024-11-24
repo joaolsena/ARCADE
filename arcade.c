@@ -4,6 +4,9 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
+#include "snake.h"
+#include "flappy_bird.h"
+#include "utils.h"  
 
 #define MAX_tela_X 35
 #define MAX_tela_y 25
@@ -28,46 +31,7 @@ const int opcao_y[] = {10, 15, 20};
 const int opcao_selecao_jogos_y[] = {5, 10, 15, 20};
 int opcao_atual = 0;
 
-int kbhit(void) {
-    struct termios oldt, newt;
-    int ch;
-    int oldf;
 
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-
-    ch = getchar();
-
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    fcntl(STDIN_FILENO, F_SETFL, oldf);
-
-    if (ch != EOF) {
-        ungetc(ch, stdin);
-        return 1;
-    }
-
-    return 0;
-}
-
-int getch(void) {
-    struct termios oldt, newt;
-    int move;
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    move = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    return move;
-}
-
-void limpar() {
-    system("clear");
-}
 
 void desenharMenuPrincipal() {
     limpar();
@@ -162,10 +126,10 @@ void mover() {
             } else if (opcao == '\n') {
                 switch (opcao_atual) {
                     case 0:
-                        printf("Iniciando Snake...\n");
+                        iniciarSnake();
                         break;
                     case 1:
-                        printf("Iniciando Flappy Bird...\n");
+                        iniciarflappy_bird();
                         break;
                     case 2:
                         printf("Iniciando Space Invaders...\n");

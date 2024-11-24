@@ -4,6 +4,8 @@
 #include <unistd.h>
 #include <time.h>
 #include <fcntl.h>
+#include "flappy_bird.h"
+#include "utils.h"
 
 #define MAX_tela_X 30
 #define MAX_tela_y 20
@@ -60,51 +62,11 @@ void carregar_pontuacao_maxima() {
     }
 }
 
-int kbhit(void) {
-    struct termios oldt, newt;
-    int ch;
-    int oldf;
-
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-
-    ch = getchar();
-
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    fcntl(STDIN_FILENO, F_SETFL, oldf);
-
-    if (ch != EOF) {
-        ungetc(ch, stdin);
-        return 1;
-    }
-
-    return 0;
-}
-
-int getch(void) {
-    struct termios oldt, newt;
-    int move;
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    move = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    return move;
-}
 
 void tocar_som(char *arquivo_som) {
     char comando[150];
     snprintf(comando, sizeof(comando), "afplay '%s' &", arquivo_som); 
     system(comando);
-}
-
-void limpar() {
-    system("clear");
 }
 
 void tela() {
@@ -312,7 +274,7 @@ void colisao() {
     }
 }
 
-int main() {
+void iniciarflappy_bird() {
     srand(time(NULL));
     carregar_pontuacao_maxima();
     tela_inicial();
@@ -324,5 +286,5 @@ int main() {
         colisao();
         usleep(ATRASO_TIQUE - (ponto*100));
     }
-    return 0;
+    
 }

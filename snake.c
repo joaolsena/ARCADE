@@ -1,9 +1,13 @@
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
 #include <unistd.h>
 #include <time.h>
 #include <fcntl.h>
+#include "snake.h" 
+
+
 
 #define MAX_tela_X 50
 #define MAX_tela_y 30
@@ -16,14 +20,14 @@
 #define ATRASO_TIQUE 200000
 #define MAX_CORPO 100  
 
-int ponto = 0;
+int ponto_snake = 0;
 int tamanho_corpo = 0; 
 int direcao_x = 1;  
 int direcao_y = 0;
-int pontuacao_maxima=0;
-const char *ARQUIVO_PONTUACAO = "pontuacao_maxima_snake.txt";
+int pontucao_maxima_snake=0;
+const char *ARQUIVO_PONTUACAO_snake = "pontucao_maxima_snake.txt";
 
-char imagem[MAX_tela_y][MAX_tela_X] = {0};
+char imagem_snake[MAX_tela_y][MAX_tela_X] = {0};
 
 typedef struct {
     int x;
@@ -48,75 +52,35 @@ typedef struct {
 comidas comida;
 
 // Funções auxiliares
-void salvar_pontuacao_maxima() {
-    FILE *fp = fopen(ARQUIVO_PONTUACAO, "w");
+void salvar_pontucao_maxima_snake_snake() {
+    FILE *fp = fopen(ARQUIVO_PONTUACAO_snake, "w");
     if (fp != NULL) {
-        fprintf(fp, "%d\n", pontuacao_maxima);
+        fprintf(fp, "%d\n", pontucao_maxima_snake);
         fclose(fp);
     } else {
         perror("Erro ao salvar a pontuação máxima");
     }
 }
 
-void carregar_pontuacao_maxima() {
-    FILE *fp = fopen(ARQUIVO_PONTUACAO, "r");
+void carregar_pontucao_maxima_snake() {
+    FILE *fp = fopen(ARQUIVO_PONTUACAO_snake, "r");
     if (fp != NULL) {
-        fscanf(fp, "%d", &pontuacao_maxima);
+        fscanf(fp, "%d", &pontucao_maxima_snake);
         fclose(fp);
     } else {
-        pontuacao_maxima = 0; // Arquivo ainda não existe
+        pontucao_maxima_snake = 0; // Arquivo ainda não existe
     }
 }
 
-int kbhit(void) {
-    struct termios oldt, newt;
-    int ch;
-    int oldf;
-
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    oldf = fcntl(STDIN_FILENO, F_GETFL, 0);
-    fcntl(STDIN_FILENO, F_SETFL, oldf | O_NONBLOCK);
-
-    ch = getchar();
-
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    fcntl(STDIN_FILENO, F_SETFL, oldf);
-
-    if (ch != EOF) {
-        ungetc(ch, stdin);
-        return 1;
-    }
-
-    return 0;
-}
-
-int getch(void) {
-    struct termios oldt, newt;
-    int move;
-    tcgetattr(STDIN_FILENO, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~(ICANON | ECHO);
-    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
-    move = getchar();
-    tcsetattr(STDIN_FILENO, TCSANOW, &oldt);
-    return move;
-}
-
-void tocar_som(char *arquivo_som) {
+void tocar_som_snake(char *arquivo_som) {
     char comando[150];
     snprintf(comando, sizeof(comando), "afplay '%s' &", arquivo_som); 
     system(comando);
 }
 
-void limpar() {
-    system("clear");
-}
 
-void tela() {
-    printf("%*sPontos: %d\n", MAX_margem + 50, "", ponto);
+void tela_snake() {
+    printf("%*sPonto_snakes: %d\n", MAX_margem + 50, "", ponto_snake);
     for (int i = 0; i < MAX_tela_y; i++) {
         for (int k = 0; k < MAX_margem; k++) {
             printf("  ");
@@ -124,11 +88,11 @@ void tela() {
         for (int j = 0; j < MAX_tela_X; j++) {
             if (j == 0 || j == MAX_tela_X - 1 || i == MAX_tela_y - 1 || i == 0) {
                 printf("\033[35m#\033[0m");
-            } else if (imagem[i][j] == forma_cabeca) {
+            } else if (imagem_snake[i][j] == forma_cabeca) {
                 printf("\033[32m%c\033[0m", forma_cabeca);
-            } else if (imagem[i][j] == forma_corpo) {
+            } else if (imagem_snake[i][j] == forma_corpo) {
                 printf("\033[32m%c\033[0m", forma_corpo);
-            } else if (imagem[i][j] == forma_comida) {
+            } else if (imagem_snake[i][j] == forma_comida) {
                 printf("\033[31m%c\033[0m", forma_comida);
             } else {
                 printf(" ");
@@ -141,7 +105,7 @@ void tela() {
 void inicia_cobra() {
     cabeca.x = MAX_tela_X / 2;
     cabeca.y = MAX_tela_y / 2;
-    imagem[cabeca.y][cabeca.x] = forma_cabeca;
+    imagem_snake[cabeca.y][cabeca.x] = forma_cabeca;
 }
 
 void inicia_comida() {
@@ -170,21 +134,21 @@ void inicia_comida() {
     }
 
     comida.ativo = 1;
-    imagem[comida.y][comida.x] = forma_comida;
+    imagem_snake[comida.y][comida.x] = forma_comida;
 }
 
-void  configuracoes_iniciais(){
+void  configuracoes_iniciais_snake(){
     inicia_cobra();
     inicia_comida();
 }
 
-void tela_inicial() {
+void tela_inicial_snake() {
     do {
         limpar();
         printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
         printf("%*s                  jogo da cobrinha                    \n", MAX_margem + 45, "");
         printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
-        printf("%*s  Pontuação máxima: %d\n", MAX_margem + 45, "", pontuacao_maxima);
+        printf("%*s  Pontuação máxima: %d\n", MAX_margem + 45, "", pontucao_maxima_snake);
         printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
         printf("%*s  Pressione 's' para iniciar o jogo\n", MAX_margem + 45, "");
         printf("%*s  Pressione 'i' para ver as instruções\n", MAX_margem + 45, "");
@@ -192,7 +156,7 @@ void tela_inicial() {
         printf("%*s-------------------------------------------------\n", MAX_margem + 45, "");
         char opcao = getch();
         if (opcao == 's') {
-            configuracoes_iniciais();
+            configuracoes_iniciais_snake();
             break; 
         } else if (opcao == 'i') {
              limpar();
@@ -201,7 +165,7 @@ void tela_inicial() {
             printf("%*s------------------------------------------------------\n", MAX_margem + 45, "");
             printf("%*s  Use as setas para mover a cobra ou w,s,a,d.\n", MAX_margem + 45, "");
             printf("%*s------------------------------------------------------\n", MAX_margem + 45, "");
-            printf("%*s  Coma as @ para crescer e ganhar pontos.\n", MAX_margem + 45, "");
+            printf("%*s  Coma as @ para crescer e ganhar ponto_snakes.\n", MAX_margem + 45, "");
             printf("%*s------------------------------------------------------\n", MAX_margem + 45, "");
             printf("%*s  Evite bater nas paredes ou no corpo da cobra.\n", MAX_margem + 45, "");
             printf("%*s------------------------------------------------------\n", MAX_margem + 45, "");
@@ -215,37 +179,37 @@ void tela_inicial() {
     } while (1);
 }
 
-void reniciar(){
+void reniciar_snake(){
 
     for (int i = 0; i < tamanho_corpo; i++) {
-        imagem[corpo[i].y][corpo[i].x] = ' ';
+        imagem_snake[corpo[i].y][corpo[i].x] = ' ';
     }
-    ponto=0;
+    ponto_snake=0;
     tamanho_corpo=0;
     comida.ativo=0;
-    imagem[comida.y][comida.x] = ' '; 
+    imagem_snake[comida.y][comida.x] = ' '; 
 }
 
-void tela_game_over() {
-     tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/snake/sons/death-sound.mp3");
-     salvar_pontuacao_maxima();
+void tela_game_over_snake() {
+     tocar_som_snake("/Users/user01/Documents/GitHub/programacao1/jogo/snake/sons/death-sound.mp3");
+     salvar_pontucao_maxima_snake_snake();
     do
     {
     limpar();
     printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
     printf("%*s                   GAME OVER                     \n", MAX_margem + 35, "");
     printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
-     printf("%*s        Pontuação maxima: %d\n", MAX_margem + 35, "", pontuacao_maxima);
+     printf("%*s        Pontuação maxima: %d\n", MAX_margem + 35, "", pontucao_maxima_snake);
     printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
-    printf("%*s        Pontuação Final: %d\n", MAX_margem + 35, "", ponto);
+    printf("%*s        Pontuação Final: %d\n", MAX_margem + 35, "", ponto_snake);
     printf("%*s-------------------------------------------------\n", MAX_margem + 35, "");
     printf("%*sPressione f para voltar ao jogo ou q para sair...\n", MAX_margem + 35, "");
    char fim = getch();
     if (fim == 'f')
     {   
-        reniciar();
+        reniciar_snake();
         limpar();
-        configuracoes_iniciais();
+        configuracoes_iniciais_snake();
         limpar();
         break;
     }else if (fim == 'q')
@@ -257,10 +221,10 @@ void tela_game_over() {
 
 void colisa_comida() {
     if (comida.ativo && cabeca.x == comida.x && cabeca.y == comida.y) {
-        ponto += 10;
+        ponto_snake += 10;
         comida.ativo = 0;
-        imagem[comida.y][comida.x] = ' ';
-        tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/snake/sons/food_G1U6tlb.mp3");
+        imagem_snake[comida.y][comida.x] = ' ';
+        tocar_som_snake("/Users/user01/Documents/GitHub/programacao1/jogo/snake/sons/food_G1U6tlb.mp3");
         inicia_comida();
         
        
@@ -268,23 +232,23 @@ void colisa_comida() {
             tamanho_corpo++;
         }
     }
-    if(pontuacao_maxima<ponto){
-        pontuacao_maxima=ponto;
+    if(pontucao_maxima_snake<ponto_snake){
+        pontucao_maxima_snake=ponto_snake;
     }
 }
 
-void colisao_tela() {
+void colisao_tela_snake() {
     if (cabeca.x == MAX_tela_X - 1 || cabeca.x == 0 || cabeca.y == MAX_tela_y - 1 || cabeca.y == 0) {
-         tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/snake/sons/hit-by-a-wood-230542.mp3");
-       tela_game_over();
+         tocar_som_snake("/Users/user01/Documents/GitHub/programacao1/jogo/snake/sons/hit-by-a-wood-230542.mp3");
+       tela_game_over_snake();
     }
 }
 
 void colisao_corpo() {
     for (int i = 0; i < tamanho_corpo; i++) {
         if (cabeca.x == corpo[i].x && cabeca.y == corpo[i].y) {
-              tocar_som("/Users/user01/Documents/GitHub/programacao1/jogo/snake/sons/hit-by-a-wood-230542.mp3");
-           tela_game_over();
+              tocar_som_snake("/Users/user01/Documents/GitHub/programacao1/jogo/snake/sons/hit-by-a-wood-230542.mp3");
+           tela_game_over_snake();
         }
     }
 }
@@ -308,7 +272,7 @@ int seta() {
 void mover_cobra() {
     
     if (tamanho_corpo > 0) {
-        imagem[corpo[tamanho_corpo - 1].y][corpo[tamanho_corpo - 1].x] = ' ';
+        imagem_snake[corpo[tamanho_corpo - 1].y][corpo[tamanho_corpo - 1].x] = ' ';
     }
 
    
@@ -322,7 +286,7 @@ void mover_cobra() {
         corpo[0].y = cabeca.y;
     }
 
-    imagem[cabeca.y][cabeca.x] = ' ';
+    imagem_snake[cabeca.y][cabeca.x] = ' ';
 
     if (kbhit()) {
         char move = seta();
@@ -334,25 +298,25 @@ void mover_cobra() {
 
     cabeca.x += direcao_x;
     cabeca.y += direcao_y;
-    imagem[cabeca.y][cabeca.x] = forma_cabeca;
+    imagem_snake[cabeca.y][cabeca.x] = forma_cabeca;
 
     
     for (int i = 0; i < tamanho_corpo; i++) {
-        imagem[corpo[i].y][corpo[i].x] = forma_corpo;
+        imagem_snake[corpo[i].y][corpo[i].x] = forma_corpo;
     }
 }
 
-int main() {
+void iniciarSnake() {
     srand(time(NULL));
-    carregar_pontuacao_maxima();
-  tela_inicial();
+    carregar_pontucao_maxima_snake();
+  tela_inicial_snake();
     while (1) {
         limpar();
-        tela();
+        tela_snake();
         colisa_comida();
         mover_cobra();
-        colisao_tela();
+        colisao_tela_snake();
         colisao_corpo();
-        usleep(ATRASO_TIQUE-(ponto*100));
+        usleep(ATRASO_TIQUE-(ponto_snake*100));
     }
 }
