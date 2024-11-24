@@ -1,5 +1,3 @@
-//g++ ARCADE.C snake.c utils.c Flappy_bird.c space_invaders.c -o ARCADE \ -I/usr/local/include/SDL2 -L/usr/local/lib -lSDL2 -lSDL2_mixer
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
@@ -7,6 +5,7 @@
 #include <time.h>
 #include <fcntl.h>
 #include "flappy_bird.h"
+#include "arcade.h" 
 #include "utils.h"
 
 #define MAX_tela_X 30
@@ -60,7 +59,7 @@ void carregar_pontuacao_maxima_bird() {
         fscanf(fp, "%d", &pontuacao_maxima_bird);
         fclose(fp);
     } else {
-        pontuacao_maxima_bird = 0; // Arquivo ainda não existe
+        pontuacao_maxima_bird = 0; 
     }
 }
 
@@ -145,7 +144,7 @@ void tela_bird_inicial_bird() {
             getch(); 
            
         } else if (opcao == 'q') {
-            exit(0);
+            inicia_arcade();
         }
     } while (1);
 }
@@ -206,7 +205,8 @@ void tela_bird_game_over_bird() {
         break;
     }else if (fim == 'q')
     {
-       exit(0); 
+        inicia_arcade();
+        
     } 
     } while (1);
 }

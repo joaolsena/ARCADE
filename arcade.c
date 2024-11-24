@@ -1,3 +1,5 @@
+//g++ ARCADE.C snake.c utils.c Flappy_bird.c space_invaders.c -o ARCADE \-I/usr/local/include/SDL2 -L/usr/local/lib -lSDL2 -lSDL2_mixer
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <termios.h>
@@ -8,10 +10,11 @@
 #include "flappy_bird.h"
 #include "space_invaders.h" 
 #include "utils.h"  
+#include "arcade.h" 
 
 #define MAX_tela_X 35
 #define MAX_tela_y 25
-#define MAX_margem 40
+#define MAX_margem 85
 
 #define forma_escolha '>'
 
@@ -148,7 +151,7 @@ void mover() {
     }
 }
 
-int main() {
+ void inicia_arcade() {
     while (1) {
         switch (estado_atual) {
             case TELA_MENU_PRINCIPAL:
@@ -163,5 +166,7 @@ int main() {
         mover();
     }
 
-    return 0;
+}
+int main(){
+    inicia_arcade();
 }

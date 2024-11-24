@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <fcntl.h>
+#include "arcade.h" 
 #include "snake.h" 
 
 
@@ -174,7 +175,7 @@ void tela_inicial_snake() {
             printf("%*s   Pressione qualquer tecla para voltar ao menu.\n", MAX_margem + 45, "");
             getch(); 
         } else if (opcao == 'q') {
-            exit(0);
+            inicia_arcade();
         }
     } while (1);
 }
@@ -214,7 +215,7 @@ void tela_game_over_snake() {
         break;
     }else if (fim == 'q')
     {
-       exit(0); 
+       inicia_arcade();
     } 
     } while (1);
 }

@@ -10,6 +10,7 @@
 #include <SDL2/SDL_mixer.h>
 #include "utils.h"
 #include "space_invaders.h" 
+#include "arcade.h" 
 
 #define MAX_tela_X 50  
 #define MAX_tela_y 16
@@ -318,7 +319,11 @@ void tela_inicial() {
     getch();
            
         } else if (opcao == 'q') {
-            exit(0);
+        Mix_Music* musica = tocarMusicaFundo("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvaders/sons/musica-jogo2.mp3");
+         Mix_FreeMusic(musica);
+         Mix_CloseAudio();
+        SDL_Quit();
+        inicia_arcade();
         }
     } while (1);
 }
@@ -395,7 +400,7 @@ void tela_game_over() {
         break;
     }else if (fim == 'q')
     {
-       exit(0); 
+      inicia_arcade();
     } 
     } while (1);
 }
@@ -589,7 +594,11 @@ void mover_jogador() {
     }else if (move == ' '){
         disparos();
     } else if (move == 'q') {
-        exit(0);
+         Mix_Music* musica = tocarMusicaFundo("/Users/user01/Documents/GitHub/programacao1/jogo/spaceinvaders/sons/musica-jogo2.mp3");
+         Mix_FreeMusic(musica);
+         Mix_CloseAudio();
+        SDL_Quit();
+        inicia_arcade();
     }
 
     imagem[jogador_p.y][jogador_p.x] = forma_jogador; 
