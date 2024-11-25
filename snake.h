@@ -2,5 +2,6 @@
 #define SNAKE_H
 
 void iniciarSnake();
+void reniciar_snake();
 
 #endif

@@ -130,15 +130,22 @@ void mover() {
             } else if (opcao == '\n') {
                 switch (opcao_atual) {
                     case 0:
+                     limpar();
+                     reniciar_snake();
                         iniciarSnake();
                         break;
                     case 1:
+                     limpar();
+                     reniciar_bird();
                         iniciarflappy_bird();
                         break;
                     case 2:
+                     limpar();
+                     reinicia_jogo();
                         inicia_space();
                         break;
                     case 3:
+                     limpar();
                         estado_atual = TELA_MENU_PRINCIPAL;
                         opcao_atual = 0;
                         break;
@@ -153,11 +160,14 @@ void mover() {
 
  void inicia_arcade() {
     while (1) {
+        limpar();
         switch (estado_atual) {
             case TELA_MENU_PRINCIPAL:
+            limpar();
                 desenharMenuPrincipal();
                 break;
             case TELA_SELECAO_JOGOS:
+            limpar();
                 desenharSelecaoJogos();
                 break;
             case SAIR:

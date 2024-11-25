@@ -2,5 +2,6 @@
 #define FLAPPY_BIRD_H
 
 void iniciarflappy_bird();
+void reniciar_bird();
 
 #endif
