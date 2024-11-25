@@ -15,6 +15,7 @@
 #define MAX_tela_X 35
 #define MAX_tela_y 25
 #define MAX_margem 85
+#define MAX_PLAYERS 10
 
 #define forma_escolha '>'
 
@@ -22,6 +23,9 @@ typedef struct {
     char nickname[10];
     int score;
 } Player;
+
+Player ranking[MAX_PLAYERS];
+int num_players = 0;
 
 typedef enum {
     TELA_MENU_PRINCIPAL,
@@ -35,6 +39,61 @@ const int opcao_y[] = {10, 15, 20};
 const int opcao_selecao_jogos_y[] = {5, 10, 15, 20};
 int opcao_atual = 0;
 
+Player jogador_atual;
+
+void ordenarRanking() {
+    for (int i = 0; i < num_players - 1; i++) {
+        for (int j = i + 1; j < num_players; j++) {
+            if (ranking[i].score < ranking[j].score) {
+                Player temp = ranking[i];
+                ranking[i] = ranking[j];
+                ranking[j] = temp;
+            }
+        }
+    }
+}
+
+// Adiciona o jogador ao ranking
+void adicionarAoRanking(Player player) {
+    // Verifica se há espaço no ranking
+    if (num_players < MAX_PLAYERS) {
+        ranking[num_players++] = player; // Adiciona o jogador
+    } else if (player.score > ranking[MAX_PLAYERS - 1].score) {
+        ranking[MAX_PLAYERS - 1] = player; // Substitui o último lugar
+    }
+    ordenarRanking(); // Ordena o ranking
+}
+
+
+// Exibe o ranking
+void exibirRanking() {
+    limpar();
+    printf("\n\033[33m--- RANKING ---\033[0m\n\n");
+    if (num_players == 0) {
+        printf("Nenhum jogador no ranking ainda.\n");
+    } else {
+        for (int i = 0; i < num_players; i++) {
+            printf("%d. %s - %d pontos\n", i + 1, ranking[i].nickname, ranking[i].score);
+        }
+    }
+    printf("\nPressione qualquer tecla para voltar ao menu...");
+    getchar(); // Aguarda entrada do usuário
+}
+
+
+// Solicita o nickname do jogador
+void solicitarNickname() {
+    limpar();
+    printf("\033[33mInsira seu nickname (até 10 caracteres):\033[0m ");
+    fgets(jogador_atual.nickname, 10, stdin);
+    jogador_atual.nickname[strcspn(jogador_atual.nickname, "\n")] = '\0'; // Remove o '\n'
+    jogador_atual.score = 0;
+}
+
+// Atualiza a pontuação após cada jogo
+void atualizarPontuacao(int pontos) {
+    jogador_atual.score += pontos;
+}
 
 
 void desenharMenuPrincipal() {
@@ -112,7 +171,7 @@ void mover() {
                 opcao_atual++;
             } else if (opcao == '\n') {
                 if (opcao_atual == 0) {
-                    printf("Abrindo Ranking...\n");
+                    exibirRanking();
                 } else if (opcao_atual == 1) {
                     estado_atual = TELA_SELECAO_JOGOS;
                     opcao_atual = 0;
@@ -132,7 +191,7 @@ void mover() {
                     case 0:
                      limpar();
                      reniciar_snake();
-                        iniciarSnake();
+                     iniciarSnake();
                         break;
                     case 1:
                      limpar();
@@ -146,6 +205,7 @@ void mover() {
                         break;
                     case 3:
                      limpar();
+                     adicionarAoRanking(jogador_atual);
                         estado_atual = TELA_MENU_PRINCIPAL;
                         opcao_atual = 0;
                         break;
@@ -178,5 +238,6 @@ void mover() {
 
 }
 int main(){
+    solicitarNickname();
     inicia_arcade();
 }
