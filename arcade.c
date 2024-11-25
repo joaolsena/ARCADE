@@ -87,7 +87,7 @@ void solicitarNickname() {
     printf("\033[33mInsira seu nickname (até 10 caracteres):\033[0m ");
     fgets(jogador_atual.nickname, 10, stdin);
     jogador_atual.nickname[strcspn(jogador_atual.nickname, "\n")] = '\0'; // Remove o '\n'
-    jogador_atual.score = 0;
+    jogador_atual.score = 20;
 }
 
 // Atualiza a pontuação após cada jogo
