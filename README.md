@@ -1,7 +1,7 @@
 # ARCADE
 
-https://github.com/user-attachments/assets/b15870da-278a-42f6-8408-42a1ca427ed6
 
+https://github.com/user-attachments/assets/a671b668-0a65-4b4d-9be5-79c6e38b6a5d
 
 
 ## Descrição
