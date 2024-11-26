@@ -70,3 +70,24 @@ Este projeto implementa um **arcade de jogos em C** que funciona no terminal. O 
    ```bash
    g++ arcade.c snake.c utils.c flappy_bird.c space_invaders.c -o ARCADE \
    -I/usr/local/include/SDL2 -L/usr/local/lib -lSDL2 -lSDL2_mixer
+
+
+  ## Dependências
+Para executar este arcade, você precisará das seguintes dependências:
+
+- **SDL2:** Biblioteca usada para sons e gráficos dos jogos.
+- **SDL2_Mixer:** Extensão para SDL2, usada para manipular áudio avançado.
+- **Ambiente Unix:** Necessário para entrada e saída no terminal e compilação do código.
+
+---
+
+## Contribuições
+
+Quer contribuir? Você pode:
+
+- Melhorar o código existente, otimizando o desempenho ou corrigindo bugs.
+- Adicionar novos jogos ou funcionalidades ao arcade.
+- Refinar a interface para torná-la mais amigável e atrativa.
+- Implementar novos recursos, como suporte a multiplayer ou integração com APIs externas.
+
+Sinta-se à vontade para abrir issues ou enviar pull requests no repositório do GitHub. Toda ajuda é bem-vinda! 😊
